@@ -72,10 +72,11 @@ namespace Ruler
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.TopMost = true;
-            this.BackColor = Color.Black;
-            this.TransparencyKey = Color.Black;
-            this.FormBorderStyle = FormBorderStyle.None;
+            TopMost = true;
+            TopLevel = true;
+            BackColor = Color.Black;
+            TransparencyKey = Color.Black;
+            FormBorderStyle = FormBorderStyle.None;
             Location = Point.Empty;
             Size = new(Screen.AllScreens.Sum(x => x.Bounds.Width), Screen.AllScreens.Sum(x => x.Bounds.Height));
             pictureBox1.Size = Size;
