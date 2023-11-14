@@ -11,23 +11,28 @@ namespace Ruler
         private Point End;
         private IMouseEventSource Mouse = WindowsInput.Capture.Global.Mouse();
         private Graphics gr;
+        private bool fromClick;
 
         public Ruler()
         {
 
             Mouse.DragStarted += Mouse_DragStarted;
             Mouse.DragFinished += Mouse_DragFinished;
+            Mouse.ButtonClick += Mouse_ButtonClick;
 
             InitializeComponent();
+        }
+
+        private void Mouse_ButtonClick(object? sender, EventSourceEventArgs<WindowsInput.Events.ButtonClick> e)
+        {
+            fromClick = true;
+            pictureBox1.Image = null;
+            pictureBox1.Invalidate();
         }
 
         private void Mouse_MouseMove(object? sender, WindowsInput.Events.Sources.EventSourceEventArgs<WindowsInput.Events.MouseMove> e)
         {
             End = new(e.Data.X, e.Data.Y);
-
-            //pictureBox1.Size = new Size(Math.Abs(Start.X - End.X), Math.Abs(Start.Y - End.Y));
-            //pictureBox1.Location = new Point(Math.Min(Start.X, End.X), Math.Min(Start.Y, End.Y));
-            var sv = Stopwatch.StartNew();
 
             pictureBox1.Image = null;
             pictureBox1.Invalidate();
@@ -54,6 +59,12 @@ namespace Ruler
 
         private void PictureBox1_Paint(object? sender, PaintEventArgs e)
         {
+            if (fromClick)
+            {   
+                fromClick = false;
+                return;
+            }
+
             Pen pen = new(Color.Gray, 3);
 
             //int startY = Start.Y > End.Y && Start.X < End.X ? pictureBox1.Bottom : pictureBox1.Top;
